@@ -1,14 +1,17 @@
 package com.example.audiopush.pusher;
 
+import com.example.audiopush.params.AudioParam;
 import com.example.audiopush.params.VideoParam;
 
 import android.hardware.Camera.CameraInfo;
 import android.view.SurfaceHolder;
 
+
 public class LivePusher {
 	
 	private SurfaceHolder surfaceHolder;
 	private VideoPusher videoPusher;
+	private AudioPusher audioPusher;
 
 	public LivePusher(SurfaceHolder surfaceHolder) {
 		this.surfaceHolder = surfaceHolder;
@@ -17,7 +20,8 @@ public class LivePusher {
 	
 	
 	private void prepare() {
-		AudeoPusher audeoPusher = new AudeoPusher();
+		AudioParam audioParam = new AudioParam();
+		audioPusher = new AudioPusher(audioParam);
 		
 		//VideoParam videoParam = new VideoParam();
 		VideoParam videoParam = new VideoParam(1920, 1080, CameraInfo.CAMERA_FACING_BACK);
@@ -27,13 +31,15 @@ public class LivePusher {
 
 	public void startPush(String url) {
 		// TODO Auto-generated method stub
-		
+		videoPusher.startPush();
+		audioPusher.startPush();
 	}
 
 
 	public void stopPush() {
 		// TODO Auto-generated method stub
-		
+		videoPusher.stopPush();
+		audioPusher.stopPush();
 	}
 
 

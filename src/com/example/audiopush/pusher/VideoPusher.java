@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.example.audiopush.params.VideoParam;
 
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PreviewCallback;
@@ -83,14 +84,21 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 			mCamera.startPreview();
 		
 			Camera.Parameters parameters = mCamera.getParameters();
+			
+			//获取预览分辨率
+			/*Size size = parameters.getPreviewSize();
+			Log.e("------>", "相机预览分辨率    "+ "width: " + size.width + "   height: " + size.height);*/
 			parameters.setPreviewSize(praram.getWidth(), praram.getHight());
-			//mCamera.setParameters(parameters);
-			List<Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes(); 
+			//设置预览格式
+			parameters.setPictureFormat(ImageFormat.YV12);
+			mCamera.setParameters(parameters);
+			
+			/*List<Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes(); 
 			List<Size> supportedPictureSizes = parameters.getSupportedPictureSizes();
 			
 			for(Size s:supportedPictureSizes) {
 				Log.e("------>", "width: " + s.width + "   height: " + s.height);
-			}
+			}*/
 			buffer = new byte[praram.getHight()* praram.getHight() * 4];
 			mCamera.addCallbackBuffer(buffer);
 			mCamera.setPreviewCallbackWithBuffer(this);
@@ -112,7 +120,7 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 	@Override
 	public void onPreviewFrame(byte[] data, Camera camera) {
 		// TODO Auto-generated method stub
-		Log.e("------>", " onPreviewFrame " );
+		//Log.e("------>", " onPreviewFrame " );
 		mCamera.addCallbackBuffer(buffer);
 	}
 
