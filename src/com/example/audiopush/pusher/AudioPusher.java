@@ -5,6 +5,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import com.example.audiopush.jni.PushNative;
 import com.example.audiopush.params.AudioParam;
 
 
@@ -14,9 +15,11 @@ public class AudioPusher extends Pusher{
 	private AudioRecord audioRecord;
 	private boolean isPushing;
 	private int minBufferSize;
+	private PushNative pushNative;
 
-	public AudioPusher(AudioParam audeoParam) {
+	public AudioPusher(AudioParam audeoParam, PushNative pushNative) {
 		this.audeoParam = audeoParam;
+		this.pushNative = pushNative;
 		int channelConfig = audeoParam.getChannelNumber() == 1? AudioFormat.CHANNEL_CONFIGURATION_MONO:AudioFormat.CHANNEL_CONFIGURATION_STEREO;
 		int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
 		minBufferSize = AudioRecord.getMinBufferSize(audeoParam.getSampleRateInHz(), channelConfig, audioFormat);

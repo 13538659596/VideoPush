@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import com.example.audiopush.jni.PushNative;
 import com.example.audiopush.params.VideoParam;
 
 import android.graphics.ImageFormat;
@@ -21,23 +22,30 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 	private Camera mCamera;
 	private VideoParam praram;
 	private byte[] buffer;
-
-	public VideoPusher(SurfaceHolder surfaceHolder, VideoParam param) {
+	private PushNative pushNative;
+	
+	private boolean isPushing = false;
+	
+	public VideoPusher(SurfaceHolder surfaceHolder, VideoParam param, PushNative pushNative) {
 		this.surfaceHolder = surfaceHolder;
 		this.praram = param;
+		this.pushNative = pushNative;
 		this.surfaceHolder.addCallback(this);
 	}
 	
 	@Override
 	public void startPush() {
 		// TODO Auto-generated method stub
-		
+		//设置视频参数
+		pushNative.setVideoOptions(praram.getWidth(), 
+				praram.getHight(), praram.getBitrate(), praram.getFps());
+		isPushing = true;
 	}
 
 	@Override
 	public void stopPush() {
 		// TODO Auto-generated method stub
-		
+		isPushing = false;
 	}
 
 	@Override
@@ -55,7 +63,7 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 	@Override
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
-		
+		//stopPreiew();
 	}
 	
 	@Override
@@ -90,7 +98,10 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 			Log.e("------>", "相机预览分辨率    "+ "width: " + size.width + "   height: " + size.height);*/
 			parameters.setPreviewSize(praram.getWidth(), praram.getHight());
 			//设置预览格式
-			parameters.setPictureFormat(ImageFormat.YV12);
+			//parameters.setPictureFormat(ImageFormat.YV12);
+			parameters.setPreviewFormat(ImageFormat.NV21);
+			//设置相机帧率
+			parameters.setPreviewFpsRange(20, 25);
 			mCamera.setParameters(parameters);
 			
 			/*List<Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes(); 
@@ -115,6 +126,7 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 			mCamera.release();
 			mCamera = null;
 		}
+		isPushing = false;
 	}
 
 	@Override
@@ -122,6 +134,12 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 		// TODO Auto-generated method stub
 		//Log.e("------>", " onPreviewFrame " );
 		mCamera.addCallbackBuffer(buffer);
+		
+		
+		if(isPushing){
+			//回调函数中获取图像数据，然后给Native代码编码
+			pushNative.fireVideo(data);
+		}
 	}
 
 }
