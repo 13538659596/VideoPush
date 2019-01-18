@@ -31,5 +31,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := audioPush
 LOCAL_SRC_FILES := audioPush.cpp
+LOCAL_STATIC_LIBRARIES := x264 faac rtmpdump
+LOCAL_LDLIBS := -llog
 
 include $(BUILD_SHARED_LIBRARY)
