@@ -30,7 +30,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE    := audioPush
-LOCAL_SRC_FILES := audioPush.cpp
+LOCAL_SRC_FILES := queue.cpp audioPush.cpp 
 LOCAL_STATIC_LIBRARIES := x264 faac rtmpdump
 LOCAL_LDLIBS := -llog
 
