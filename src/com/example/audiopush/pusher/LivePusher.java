@@ -35,7 +35,7 @@ public class LivePusher {
 	public void startPush(String url) {
 		// TODO Auto-generated method stub
 		videoPusher.startPush();
-		audioPusher.startPush();
+		//audioPusher.startPush();
 		pushNative.startPush(url);
 	}
 

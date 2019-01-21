@@ -101,7 +101,7 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 			//parameters.setPictureFormat(ImageFormat.YV12);
 			parameters.setPreviewFormat(ImageFormat.NV21);
 			//设置相机帧率
-			parameters.setPreviewFpsRange(20, 25);
+			//parameters.setPreviewFpsRange(20, 25);
 			mCamera.setParameters(parameters);
 			
 			/*List<Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes(); 

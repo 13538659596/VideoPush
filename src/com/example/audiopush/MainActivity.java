@@ -18,7 +18,7 @@ import android.os.Build;
 public class MainActivity extends Activity {
 
     private LivePusher live;
-    static final String URL = "rtmp://134.175.115.72/live/jason";
+    static final String URL = "rtmp://192.168.31.110/live/jason";
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
