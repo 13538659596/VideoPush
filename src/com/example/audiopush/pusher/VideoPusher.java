@@ -88,14 +88,7 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 		try {
 			mCamera = Camera.open(praram.getCameraId());
 		
-			mCamera.setPreviewDisplay(surfaceHolder);
-			mCamera.startPreview();
-		
 			Camera.Parameters parameters = mCamera.getParameters();
-			
-			//获取预览分辨率
-			/*Size size = parameters.getPreviewSize();
-			Log.e("------>", "相机预览分辨率    "+ "width: " + size.width + "   height: " + size.height);*/
 			parameters.setPreviewSize(praram.getWidth(), praram.getHight());
 			//设置预览格式
 			//parameters.setPictureFormat(ImageFormat.YV12);
@@ -103,6 +96,11 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 			//设置相机帧率
 			//parameters.setPreviewFpsRange(20, 25);
 			mCamera.setParameters(parameters);
+			
+			//获取预览分辨率
+			Size size = parameters.getPreviewSize();
+			Log.e("------>", "相机预览分辨率    "+ "width: " + size.width + "   height: " + size.height);
+			
 			
 			/*List<Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes(); 
 			List<Size> supportedPictureSizes = parameters.getSupportedPictureSizes();
@@ -113,6 +111,8 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 			buffer = new byte[praram.getHight()* praram.getHight() * 4];
 			mCamera.addCallbackBuffer(buffer);
 			mCamera.setPreviewCallbackWithBuffer(this);
+			mCamera.setPreviewDisplay(surfaceHolder);
+			mCamera.startPreview();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,7 +126,6 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 			mCamera.release();
 			mCamera = null;
 		}
-		isPushing = false;
 	}
 
 	@Override

@@ -1,9 +1,16 @@
 package com.example.audiopush.jni;
 
+import com.example.audiopush.listener.LiveStateChangeListener;
+
 /**
  * 调用C代码进行编码与推流
  */
 public class PushNative {
+	
+	public static final int CONNECT_FAILED = 101;
+	public static final int INIT_FAILED = 102;
+	
+	private LiveStateChangeListener liveStateChangeListener;
 	
 	public native void startPush(String url);
 	
@@ -33,6 +40,26 @@ public class PushNative {
 	 * @param data
 	 */
 	public native void fireVideo(byte[] data);
+	
+	
+	/**
+	 * 接收Native层抛出的错误
+	 * @param code
+	 */
+	public void throwNativeError(int code){
+		if(liveStateChangeListener != null){
+			liveStateChangeListener.onError(code);
+		}
+	}
+	
+	public void setLiveStateChangeListener(LiveStateChangeListener liveStateChangeListener) {
+		this.liveStateChangeListener = liveStateChangeListener;
+	}
+	
+	public void removeLiveStateChangeListener(){
+		this.liveStateChangeListener = null;
+	}
+	
 	
 	/**
 	 * 发送音频数据

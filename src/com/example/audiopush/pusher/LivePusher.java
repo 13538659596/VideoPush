@@ -1,6 +1,7 @@
 package com.example.audiopush.pusher;
 
 import com.example.audiopush.jni.PushNative;
+import com.example.audiopush.listener.LiveStateChangeListener;
 import com.example.audiopush.params.AudioParam;
 import com.example.audiopush.params.VideoParam;
 
@@ -27,15 +28,16 @@ public class LivePusher {
 		audioPusher = new AudioPusher(audioParam, pushNative);
 		
 		//VideoParam videoParam = new VideoParam();
-		VideoParam videoParam = new VideoParam(1920, 1080, CameraInfo.CAMERA_FACING_BACK);
+		VideoParam videoParam = new VideoParam(352, 288, CameraInfo.CAMERA_FACING_BACK);
 		//videoParam.setCameraId(CameraInfo.CAMERA_FACING_BACK);
 		videoPusher = new VideoPusher(surfaceHolder, videoParam, pushNative);
 	}
 
-	public void startPush(String url) {
+	public void startPush(String url, LiveStateChangeListener listener) {
 		// TODO Auto-generated method stub
+		pushNative.setLiveStateChangeListener(listener);
 		videoPusher.startPush();
-		//audioPusher.startPush();
+		audioPusher.startPush();
 		pushNative.startPush(url);
 	}
 

@@ -16,21 +16,23 @@ public class AudioPusher extends Pusher{
 	private boolean isPushing;
 	private int minBufferSize;
 	private PushNative pushNative;
-
+	private int channelConfig;
 	public AudioPusher(AudioParam audeoParam, PushNative pushNative) {
 		this.audeoParam = audeoParam;
 		this.pushNative = pushNative;
-		int channelConfig = audeoParam.getChannelNumber() == 1? AudioFormat.CHANNEL_CONFIGURATION_MONO:AudioFormat.CHANNEL_CONFIGURATION_STEREO;
+		channelConfig = audeoParam.getChannelNumber() == 1? AudioFormat.CHANNEL_CONFIGURATION_MONO:AudioFormat.CHANNEL_CONFIGURATION_STEREO;
 		int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
 		minBufferSize = AudioRecord.getMinBufferSize(audeoParam.getSampleRateInHz(), channelConfig, audioFormat);
 		audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, 
 				audeoParam.getSampleRateInHz(), 
 				channelConfig, audioFormat, minBufferSize);
+	
 	}
 	
 	@Override
 	public void startPush() {
 		// TODO Auto-generated method stub
+		pushNative.setAudioOptions(audeoParam.getSampleRateInHz(), audeoParam.getChannelNumber());
 		isPushing = true;
 		new Thread(new AudioRecordTask()).start();
 	}
@@ -63,9 +65,9 @@ public class AudioPusher extends Pusher{
 				byte[] buffer = new byte[minBufferSize];
 				int len = audioRecord.read(buffer, 0, buffer.length);
 				if(len > 0){
-					Log.e("------->", "视频录音");
+					//Log.e("------->", "视频录音");
 					//传给Native代码，进行音频编码
-					//pushNative.fireAudio(buffer, len);
+					pushNative.fireAudio(buffer, len);
 				}
 			}
 		}
