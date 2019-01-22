@@ -42,7 +42,7 @@ public class AudioPusher extends Pusher{
 		// TODO Auto-generated method stub
 		isPushing = false;
 		audioRecord.stop();
-		
+		pushNative.stopPush();
 	}
 
 	@Override

@@ -46,6 +46,7 @@ public class VideoPusher extends Pusher implements Callback, PreviewCallback{
 	public void stopPush() {
 		// TODO Auto-generated method stub
 		isPushing = false;
+		pushNative.stopPush();
 	}
 
 	@Override
